@@ -1,48 +1,72 @@
+// The TodoItem class uses this template. 
+// The template contains a style tag and all of the 
+// html elements that will be used by the component.
+
 const todoItemTemplate = document.createElement('template');
 todoItemTemplate.innerHTML = `
 <style>
+  /* This is like styling the body for this shadow root */
   :host {
     display: block;
     font-family: sans-serif;
   }
 
-  .completed {
+  li {
+    display: flex;
+    
+    /* Pushes the button to the right */
+    & :last-child {
+      margin-left: auto;
+    }
+  }
+
+  /*  */
+  .completed #text-label {
     text-decoration: line-through;
   }
 
+  /*  */
   button {
     border: none;
     cursor: pointer;
+    justify-self: flex-end;
   }
 </style>
-<li class="item">
-  <input type="checkbox">
-  <label></label>
+
+<li class="item"> 
+  <label for="box">
+    <input id="box" type="checkbox">
+    <span id="text-label"></span>
+  </label>
   <button>X</button>
 </li>
 `;
 
 class TodoItem extends HTMLElement {
+  // Create a shadowroot as a provate property. 
+  // making this provate may be over thinking this a bit.
+  #shadowRoot = this.attachShadow({ 'mode': 'open' });
+
+  // *** Init ***
   constructor() {
     super();
-    
-    this._shadowRoot = this.attachShadow({ 'mode': 'open' });
-    this._shadowRoot.appendChild(todoItemTemplate.content.cloneNode(true));
+  
+    this.#shadowRoot.appendChild(todoItemTemplate.content.cloneNode(true));
 
-    this.$item = this._shadowRoot.querySelector('.item');
-    this.$removeButton = this._shadowRoot.querySelector('button');
-    this.$text = this._shadowRoot.querySelector('label');
-    this.$checkbox = this._shadowRoot.querySelector('input');
+    this.item = this.#shadowRoot.querySelector('.item');
+    this.removeButton = this.#shadowRoot.querySelector('button');
+    this.text = this.#shadowRoot.querySelector('#text-label');
+    this.checkbox = this.#shadowRoot.querySelector('input');
 
-    this.$removeButton.addEventListener('click', (e) => {
-      this.dispatchEvent(new CustomEvent('onRemove', { detail: this.index }));
-    });
-
-    this.$checkbox.addEventListener('click', (e) => {
-      this.dispatchEvent(new CustomEvent('onToggle', { detail: this.index }));
-    });
+    // Bind event handlers
+    this.removeTodo = this.removeTodo.bind(this)
+    this.toggleTodo = this.toggleTodo.bind(this)
+    // Add some listeners
+    this.removeButton.addEventListener('click', this.removeTodo);
+    this.checkbox.addEventListener('click', this.toggleTodo);
   }
 
+  // *** Lifecycle ***
   connectedCallback() {
     // We set a default attribute here; if our end user hasn't provided one,
     // our element will display a "placeholder" text instead.
@@ -50,21 +74,41 @@ class TodoItem extends HTMLElement {
       this.setAttribute('text', 'placeholder');
     }
 
-    this._renderTodoItem();
+    this.#renderTodoItem();
   }
 
-  _renderTodoItem() {
+  disconnectedCallback() {
+    this.removeButton.removeEventListener('click', this.removeTodo);
+    this.checkbox.removeEventListener('click', this.toggleTodo);
+    console.log('removing listeners')
+  }
+
+  // *** Events ***
+  removeTodo(e) {
+    // This component can issue its own custom events
+    this.dispatchEvent(new CustomEvent('onRemove', { detail: this.index }))
+  }
+
+  toggleTodo(e) {
+    // This component can issue its own custom events
+    this.dispatchEvent(new CustomEvent('onToggle', { detail: this.index }));
+  }
+
+  // *** Render *** 
+  #renderTodoItem() {
     if (this.hasAttribute('checked')) {
-      this.$item.classList.add('completed');
-      this.$checkbox.setAttribute('checked', '');
+      this.item.classList.add('completed');
+      this.checkbox.setAttribute('checked', '');
     } else {
-      this.$item.classList.remove('completed');
-      this.$checkbox.removeAttribute('checked');
+      this.item.classList.remove('completed');
+      this.checkbox.removeAttribute('checked');
     }
 
-    this.$text.innerHTML = this._text
+    this.text.innerHTML = this._text
   }
 
+
+  // *** Attributes ***
   static get observedAttributes() {
     return ['text', 'checked', 'index']
   }
@@ -103,4 +147,5 @@ class TodoItem extends HTMLElement {
     }
   }
 }
+
 window.customElements.define('to-do-item', TodoItem)

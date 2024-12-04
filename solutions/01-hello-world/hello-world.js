@@ -16,8 +16,10 @@ class HelloWorld extends HTMLElement {
     super(); // MUST call super!
     // Attach a shadow root to the element.
     this._shadowRoot = this.attachShadow({ mode: 'open' });
-    // open: Elements of the shadow root are accessible from JavaScript outside the root
-    // closed: Denies access to the node(s) of a closed shadow root from JavaScript outside it
+    // open: Elements of the shadow root are accessible from JavaScript 
+    // outside the root
+    // closed: Denies access to the node(s) of a closed shadow root 
+    // from JavaScript outside it
     
     // Make a new element to hold hello world
     this._el = document.createElement('h1')
@@ -30,6 +32,7 @@ class HelloWorld extends HTMLElement {
     this._el.style.padding = '0.25em 0.5em'
     this._el.style.textAlign = 'center'
     this._el.style.letterSpacing = '3'
+    this._el.style.textOrientation = 'vertical-rl'
 
     // Add this element to the shadow root
     this._shadowRoot.appendChild(this._el)
@@ -37,6 +40,8 @@ class HelloWorld extends HTMLElement {
 }
 
 // Register this new tag <hello-world></hello-world>
+// Do not use self closing tags! <hello-world /> BAD!!!!
+// <hello-world></hello-world> GOOD!!!
 customElements.define('hello-world', HelloWorld);
 // ---------
 

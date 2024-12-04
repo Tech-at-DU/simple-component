@@ -16,10 +16,12 @@ class SimpleSlides extends HTMLElement {
 
     // Create a couple elements to manage slides
     this._container = document.createElement('div')
+
+
     // Add some styles
     this._container.style.width = this._width + 'px'
     this._container.style.height = this._height + 'px'
-    this._container.style.border = '6px solid'
+    this._container.style.border = '1px solid'
     this._container.style.overflow = 'hidden'
 
     this._inner = document.createElement('div')
@@ -54,15 +56,17 @@ class SimpleSlides extends HTMLElement {
     clearInterval(this._timer)
   }
 
+  // lifecycle method 
   connectedCallback() {
     this._addTimer()
     this._nextImg()
   }
-
+  // lifecycle method
   disconnectedCallback() {
     this._removeTimer()
   }
 
+  // These are the attributes this component OBSERVING
   static get observedAttributes() {
     return ['time', 'paused', 'transition']
   }
@@ -71,6 +75,7 @@ class SimpleSlides extends HTMLElement {
     switch(name) {
       case 'time':
         this._time = newValue
+        // this._removeTimer()
         this._addTimer()
         break
     
@@ -85,6 +90,15 @@ class SimpleSlides extends HTMLElement {
 
     }
   }
+
+  // get _time2() {
+  //   return this._time
+  // }
+
+  // set _time2(newTime) {
+  //   this._time = newTime
+  //   this._addTimer()
+  // }
 
   _nextImg() {
     this._index = (this._index + 1) % this._imgs.length
