@@ -1,24 +1,35 @@
 <html>
 <head>
-  <script src="./frmwrk-blink.js"></script>
-  <script src="./frmwrk-copy.js"></script>
-  <script src="./frmwrk-counter.js"></script>
-  <script src="./my-element.js"></script>
-  <script src="./frmwrk-copy-2.js"></script>
-  <style>
-    hello-world {
-      color: red;
-    }
-  </style>
+  <script defer src="./fw-blink.js" type="module"></script>
+  <script defer src="./fw-copy.js" type="module"></script>
+  <script defer src="./hello-card.js" type="module"></script>
+  <script defer src="./fw-counter.js" type="module"></script>
 </head>
 <body>
 
-  <!-- Custom elements can not be self colsing -->
-  <hello-world name="Frango"></hello-world>
+  <!-- Custom elements can not be self closing -->
+  <p>*** fw blink - blinks ***</p>
+  <fw-blink>Hello World</fw-blink>
+  
+  <p>*** fw copy - adds a copyright date ***</p>
+  <fw-copy>CSS Frmwrk</fw-copy>
+  
+  <p>*** fw card - a card with slots ***</p>
   <hello-card>
-    <h2 slot="headerLine">Card 1</h2>
-    <p slot="contentLine">Isn't it a fine day.</p>
+    <span slot="card-title"><h1>This is my custom text</h1></span>
+    <span slot="card-body">Slots are an interesting addition to templtes.</span>
   </hello-card>
+
+  <hello-card>
+    <span slot="card-title"><h1>This is my custom text</h1></span>
+    <span slot="card-body">Slots are an interesting addition to templtes.</span>
+  </hello-card>
+  
+  <p>*** fw counter - a counter ***</p>
+  <fw-counter></fw-counter>
+
+  <!--
+
   <hello-card>
       <h2 slot="headerLine">Card 2</h2>
       <p slot="contentLine">Rootbeer floats anyone?</p>
@@ -50,5 +61,7 @@
       ])
         .then(_ => console.log('copy and blink defined'));
   </script>
+
+-->
 </body>
 </html>

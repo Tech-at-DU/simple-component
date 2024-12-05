@@ -5,7 +5,7 @@ class rainbowText extends HTMLElement {
 
     this._shadowRoot = this.attachShadow({ mode: 'open' });
     this._text = this.innerHTML
-
+    
     this._characters = this._text.split('')
     for (let i = 0; i < this._characters.length; i += 1) {
       const el = document.createElement('span')

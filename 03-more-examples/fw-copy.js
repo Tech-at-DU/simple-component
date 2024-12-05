@@ -29,4 +29,4 @@ class Copyright extends HTMLElement {
   }
 }
 
-customElements.define('frmwrk-copy', Copyright);
+customElements.define('fw-copy', Copyright);

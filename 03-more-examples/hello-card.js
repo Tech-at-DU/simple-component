@@ -1,48 +1,44 @@
 
-(function() {
-  const template = document.createElement('template')
-  template.content = `
-  style {
-    :host {
+// Create a template
+const template = document.createElement('template');
+template.innerHTML = `
+  <style>
+    div {
+      border: 1px solid;
+      padding: 1rem;
+      margin: 1rem;
       font-family: Helvetica;
-      color: cornflower;
     }
-  }
+
+    /* the styles above don't apply to slots! */
+    h1 {
+      margin: 0;
+    }
+
+    /* But, you can use the ::slotted() pseudo class */
+    ::slotted(*) {
+      color: red;
+      margin: 0;
+    }
+  </style>
   <div>
-    <h1><slot name="title"></span></h1>
-    <p><slot name="subtitle"></span></p>
+    <slot name="card-title">Default text</slot>
+    <slot name="card-body">Default text</slot>
   </div>
-  `
-  class HelloCard extends HTMLElement {
-    constructor() {
-      super();
-      this._shadowRoot = this.attachShadow({ mode: 'open' });
+`;
 
-      this._shadowRoot.innerHTML = `
-        <div id="header">
-          <span slot="headerLine"> Rootbeer Float </span>
-        </div>
-        <div id="body">
-          <span slot="subtitle">Are the best</span>
-        </div>`;
-    }
+class HelloCard extends HTMLElement {
+  constructor() {
+    super();
 
-    connectedCallback() {
-      customElements.whenDefined('hello-card').then(_ => {
-        const titleContent = this._getTitle()
-        const subtitleContent = this._getSubtitle()
-        
-      })
-    }
+    // Create a shadow root
+    const shadowRoot = this.attachShadow({ mode: 'open' });
 
-    _getTitle() {
-      return this.querySelector('h2')
-    }
-
-    _getSubtitle() {
-      return this.querySelector('p')
-    }
+    // Clone the template and append it to the shadow root
+    const templateContent = template.content.cloneNode(true);
+    shadowRoot.appendChild(templateContent);
   }
-  
-  customElements.define('hello-card', HelloCard)
-})()
+}
+
+// Define the custom element
+customElements.define('hello-card', HelloCard);

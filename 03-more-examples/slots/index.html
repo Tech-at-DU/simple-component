@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card Web Component</title>
+  <style>
+    card-component {
+      display: block;
+      max-width: 400px;
+      margin: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .card {
+      padding: 1rem;
+    }
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .card-body {
+      font-size: 1rem;
+      color: #555;
+    }
+
+    /* Notice that the slot elements are styled from outside the component! */
+    h1, h2 {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+   <!-- 
+
+      These "slot" elements will be appended to the named slot elements in the component. 
+      Notcie that the entire HTML content of an element with the slot attribute is rendered 
+      at the location of the <slot> element with the matching name. You'll find the slot 
+      elements in the class CardComponent below.
+
+      Below I have implemented the CardComponent three times, with different slotted 
+      markup each time. 
+
+      Read the CharGPT explanation of this system for some good insight. 
+       
+    -->
+  <card-component>
+    <span slot="title">Slots</span>
+    <p slot="body">The <slot> HTML element—part of the Web Components technology 
+      suite—is a placeholder inside a web component that you can fill with your 
+      own markup, which lets you create separate DOM trees and present them 
+      together.</p>
+  </card-component>
+
+  <card-component>
+    <span slot="title"><h2>Attributes</h2></span>
+    <p slot="body">Slots use a <code>name</code> attribute. Elements with 
+    the matching <code>slot</code> attribute value are </p>
+  </card-component>
+
+  <card-component>
+    <span slot="title"><h2>ChatGPT Says</h2></span>
+    <div slot="body">
+      <p>Elements using the `slot` attribute are not physically 
+        moved in the DOM but are rendered in the appropriate slot within the 
+        shadow DOM.</p>
+
+      <p>When an element (e.g., <code>&lt;span slot="title"&gt;</code>) uses the `slot` 
+        attribute, it remains in its original location in the light DOM. 
+        The <code>&lt;slot&gt;</code> elements in the shadow DOM act as placeholders that 
+        display this content as if it has been appended there. This allows 
+        for a separation of the shadow DOM structure (template of the component) 
+        and the light DOM content provided by the user.</p>
+
+      <p>In other words, the slotted content is displayed within the shadow 
+        DOM at the location of the <code>&lt;slot&gt;</code> element, but it does not 
+        actually change position in the overall DOM structure. The browser 
+        handles linking the slot element and the corresponding slotted 
+        content.</p>
+
+    </div>
+  </card-component>
+  <script>
+    class CardComponent extends HTMLElement {
+      constructor() {
+        super();
+
+        // Attach shadow DOM
+        const shadow = this.attachShadow({ mode: 'open' });
+
+        // Create elements
+        const container = document.createElement('div');
+        container.classList.add('card');
+
+        const titleSlot = document.createElement('slot');
+        titleSlot.name = 'title';
+        titleSlot.classList.add('card-title');
+
+        const bodySlot = document.createElement('slot');
+        bodySlot.name = 'body';
+        bodySlot.classList.add('card-body');
+
+        // Append elements
+        container.appendChild(titleSlot);
+        container.appendChild(bodySlot);
+        shadow.appendChild(container);
+
+        // Apply styles
+        const style = document.createElement('style');
+        
+        style.textContent = `
+          :host {
+            display: block;
+            max-width: 400px;
+            margin: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+          }
+          .card {
+            padding: 1rem;
+          }
+          .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+          }
+          .card-body {
+            font-size: 1rem;
+            color: #555;
+          }
+        `;
+        shadow.appendChild(style);
+      }
+    }
+
+    // Define the custom element
+    customElements.define('card-component', CardComponent);
+  </script>
+</body>
+</html>
