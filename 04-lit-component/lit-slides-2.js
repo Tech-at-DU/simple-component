@@ -20,7 +20,16 @@ class LitSlides2 extends LitElement {
     
     this.slideCount = slides.length
     this.slidesInner = this.renderRoot.querySelector('.slides-inner')
-    this.slidesOffset = getComputedStyle(this.slidesInner).getPropertyValue('--slide-width');
+    this.slidesOffset = parseInt(getComputedStyle(this.slidesInner).getPropertyValue('--slide-width'))
+
+    // setting a custom property with JS is easier than getting the property!
+    // Set a property with: 
+    // element.style.setProperty('--some-custom-prop', 'value')
+    // To get a custom property you must use getComputedStyle(element) first!
+    // getComputedStyle(element).getPropertyValue('--some-custom-prop')
+    // In this example above this returns 259px. I needed a number so I passed the 
+    // returned string value to parseInt() which removes the suffix. 
+
     this._updateSlideVisibility(); // Ensure the first slide is visible on load
   }
 
@@ -48,7 +57,7 @@ class LitSlides2 extends LitElement {
 
     .slides-inner {
       display: flex;
-      transition: 1000ms;
+      transition: 400ms;
     }
 
     .slide {
@@ -121,7 +130,7 @@ class LitSlides2 extends LitElement {
   }
 
   _updateSlideVisibility() {
-    this.slidesInner.style.transform = `translate(${this.index * -259}px, 0)`
+    this.slidesInner.style.transform = `translate(${this.index * -this.slidesOffset}px, 0)`
     this.requestUpdate();
   }
 }
