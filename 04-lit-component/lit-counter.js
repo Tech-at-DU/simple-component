@@ -12,7 +12,10 @@ class LitCounter extends LitElement {
   // Declaring count here makes it a reactive, this causes the component 
   // to render when the the value of count changes. 
   static properties = {
-    count: { type: Number, reflect: true }
+    count: { 
+      type: Number, 
+      reflect: true 
+    }
   };
 
   // Initialize this component

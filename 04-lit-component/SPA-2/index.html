@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slot-Based SPA</title>
+  <script type="module">
+    import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js';
+
+    // Define the Page Component
+    class MyPage extends LitElement {
+      static properties = {
+        name: { type: String, reflect: true },
+        active: { type: Boolean, reflect: true },
+      };
+
+      static styles = css`
+        :host {
+          display: none;
+        }
+        :host([active]) {
+          display: block;
+        }
+      `;
+
+      render() {
+        return html`<slot name="content"></slot>`;
+      }
+    }
+    customElements.define('my-page', MyPage);
+
+    // Define the Main App Component
+    class MyApp extends LitElement {
+      static styles = css`
+        :host {
+          display: block;
+          font-family: Arial, sans-serif;
+        }
+        nav {
+          display: flex;
+          gap: 1rem;
+          background: #eee;
+          padding: 10px;
+          border-bottom: 1px solid #ddd;
+        }
+        nav a {
+          text-decoration: none;
+          color: #333;
+          font-weight: bold;
+        }
+        nav a:hover {
+          color: #007BFF;
+        }
+      `;
+
+      firstUpdated() {
+        this._setupRouting();
+      }
+
+      render() {
+        return html`
+          <nav>
+            <a href="#home" @click="${this._navigate}">Home</a>
+            <a href="#about" @click="${this._navigate}">About</a>
+          </nav>
+          <slot></slot>
+        `;
+      }
+
+      _setupRouting() {
+        const hash = window.location.hash.slice(1) || 'home';
+        console.log(window.location)
+        this._showPage(hash);
+
+        window.addEventListener('hashchange', () => {
+          const newHash = window.location.hash.slice(1);
+          console.log(window.location.hash)
+          this._showPage(newHash);
+        });
+      }
+
+      _navigate(event) {
+        event.preventDefault(); // Prevent default navigation
+        const href = event.target.getAttribute('href');
+        window.location.hash = href.slice(1); // Update the hash
+      }
+
+      _showPage(pageName) {
+        const pages = Array.from(this.querySelectorAll('my-page'));
+        pages.forEach((page) => {
+          page.active = page.name === pageName;
+        });
+      }
+    }
+    customElements.define('my-app', MyApp);
+  </script>
+</head>
+<body>
+
+  <!-- my-app manages pages -->
+  <my-app>
+
+    <!-- each page is an instance of my-page and the content is rendered to a slot -->
+    <!-- customized pages could be created that have content assigned to layout slots -->
+    <!-- This might be better than other SPAs in that the content is contained in the DOM which improves SEO -->
+    <my-page name="home">
+      <div slot="content"><h1>Home</h1><p>Welcome to the home page.</p></div>
+    </my-page>
+    
+    <my-page name="about">
+      <div slot="content"><h1>About</h1><p>This is the about page.</p></div>
+    </my-page>
+
+  </my-app>
+
+</body>
+</html>

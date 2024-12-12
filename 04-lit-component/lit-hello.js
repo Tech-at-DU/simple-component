@@ -19,8 +19,7 @@ class LitHello extends LitElement {
   // Always run your html through the html function. 
   // See Tagged Templates here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates
   render() {
-    return html`
-    <h1>Hello World</h1>`
+    return html`<h1>Hello World</h1>`
   }
 }
 
