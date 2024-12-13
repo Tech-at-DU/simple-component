@@ -104,11 +104,23 @@
     <!-- customized pages could be created that have content assigned to layout slots -->
     <!-- This might be better than other SPAs in that the content is contained in the DOM which improves SEO -->
     <my-page name="home">
-      <div slot="content"><h1>Home</h1><p>Welcome to the home page.</p></div>
+      <div slot="content">
+        <h1>Home</h1>
+        <p>Welcome to the home page.</p>
+        <p>Any content here!</p>
+      </div>
     </my-page>
     
     <my-page name="about">
-      <div slot="content"><h1>About</h1><p>This is the about page.</p></div>
+      <div slot="content">
+        <h1>About</h1>
+        <p>This is the about page.</p>
+        <ul>
+          <li>One</li>
+          <li>Two</li>
+          <li>Three</li>
+        </ul>
+      </div>
     </my-page>
 
   </my-app>
