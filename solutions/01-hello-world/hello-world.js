@@ -1,82 +1,52 @@
+// Hello World Web Component
+// Defines a custom <hello-world> element that renders “Hello World”.
 
-
-
-// Define a class that extends HTMLElement
-// You can also extend specific tags 
-// Like: HTMLParagraphElement
-// Some elements can't have a shadow root attached to them 
-// for security reasons.
-
-// The code below defines a simple web component. 
-// This hello world illustrates the basic features of web components 
-
-// Make a new Component
 class HelloWorld extends HTMLElement {
   constructor() {
-    super(); // MUST call super!
-    // Attach a shadow root to the element.
-    this._shadowRoot = this.attachShadow({ mode: 'open' });
-    // open: Elements of the shadow root are accessible from JavaScript 
-    // outside the root
-    // closed: Denies access to the node(s) of a closed shadow root 
-    // from JavaScript outside it
-    
-    // Make a new element to hold hello world
-    this._el = document.createElement('h1')
-    // Set the content of the new element
-    this._el.innerHTML = '<em>Foo Bar</em>'
-    // Set styles on the new element
-    this._el.style.color = 'rgb(255, 255, 0)'
-    // background-color -> backgroundColor
-    this._el.style.backgroundColor = 'black'
-    this._el.style.padding = '0.25em 0.5em'
-    this._el.style.textAlign = 'center'
-    this._el.style.letterSpacing = '3'
-    this._el.style.textOrientation = 'vertical-rl'
+    super(); // always call super() in a custom element constructor
+  }
 
-    // Add this element to the shadow root
-    this._shadowRoot.appendChild(this._el)
+  // Use connectedCallback to initialize your component
+  connectedCallback() {
+    // runs when the element is added to the document
+    // Attach a shadow root so the component manages its own internal DOM.
+    const shadow = this.attachShadow({ mode: 'open' });
+
+    // Create the element that will hold the text.
+    const el = document.createElement('h1');
+    el.textContent = 'Hello World';
+
+    // Basic styling for the text via <style> in the shadow DOM.
+    const style = document.createElement('style');
+    style.textContent = `
+      h1 {
+        color: red;
+        font-size: 3rem;
+        letter-spacing: 1rem;
+      }
+    `;
+
+    // Add styles and content to the shadow root.
+    shadow.append(style, el);
   }
 }
 
-// Register this new tag <hello-world></hello-world>
-// Do not use self closing tags! <hello-world /> BAD!!!!
-// <hello-world></hello-world> GOOD!!!
 customElements.define('hello-world', HelloWorld);
-// ---------
-
 
 /*  
+Challenges:
 
-- Challenges - 1 - 
+1. Change the internal element from a <span> to a <h1>. 
+   - Update both the element creation and the <style> rules.
 
-The code above creates child element that is a span at line 21. 
-You might want to create any element. Change this to a h1.
+2. Change the text to something else and adjust the styles
+   (font-size, color, letter-spacing) so the element looks 
+   clearly different.
 
-- Challenge - 2 - 
- 
-Above the code applies styles to the element via JS. You can use 
-all CSS styles by converting them to camelCase. For example: 
+3. Bonus: Add a second <hello-world> element on the page.
+   - Does each instance render its own shadow DOM?
+   - Try inspecting them in DevTools.
 
-background-color -> backgroundColor
-font-size -> fontSize
-
-Use three different styles to style the element. Try these or 
-use your own ideas: 
-
-- fontSize
-- color
-- letterSpacing
-
+When you're finished be sure to inspect the element and 
+open the Shadow Content. 
 */
-
-// const cats = 999
-// function catTap() {
-
-// }
-
-// export { catTap, cats }
-
-// // -----
-
-// import { catTap, cats} from './script.js'
