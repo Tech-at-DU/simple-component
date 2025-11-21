@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Component Slots</title>
+</head>
+<body>
+  
+
+  <fancy-box>
+  <!-- Fills the unnamed slot -->
+  Here is some content inside the box!
+</fancy-box>
+
+<fancy-box>
+  <!-- Named slot -->
+  <span slot="title">Custom Box Title</span>
+
+  <!-- Unnamed slot -->
+  <p>This box has custom content too.</p>
+</fancy-box>
+
+<fancy-box>
+  <!-- Only replacing title -->
+  <span slot="title">Title Only — Content Falls Back</span>
+</fancy-box>
+
+
+
+<script type="module" src="fancy-box.js"></script>
+
+</body>
+</html>

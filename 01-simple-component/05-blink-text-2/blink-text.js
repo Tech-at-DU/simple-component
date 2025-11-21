@@ -1,109 +1,204 @@
+// Tutorial — Blink Text with Attributes
+// -------------------------------------
+//
+// This version of <blink-text> uses attributes to control how it blinks.
+//
+// Example usage:
+//
+//   <blink-text time="1000" min="0.2" max="1.0">Blink slowly</blink-text>
+//
+// Attributes:
+//
+//   - time: interval in milliseconds between opacity changes (default e.g. 1000ms)
+//   - min:  minimum opacity (0.0–1.0), e.g. 0.2
+//   - max:  maximum opacity (0.0–1.0), e.g. 1.0
+//
+// Your goals:
+//
+//   1. Read the initial attribute values in the constructor or connectedCallback.
+//   2. Watch for changes to those attributes (observedAttributes + attributeChangedCallback).
+//   3. Start an interval timer in connectedCallback that toggles opacity between min and max.
+//   4. Clear the interval in disconnectedCallback.
+//   5. Update the timer when attributes change (e.g. time is updated).
 
 class BlinkText extends HTMLElement {
   constructor() {
     super();
-    
+
+    // Attach shadow root
     this._shadowRoot = this.attachShadow({ mode: 'open' });
 
-    // Make a new p element
-    this._blinkEl = document.createElement('span')
-    this._shadowRoot.appendChild(this._blinkEl)
+    // Create an internal span to hold the blinking text
+    this._blinkEl = document.createElement('span');
+    this._shadowRoot.appendChild(this._blinkEl);
 
-    // Get the text in the original tag and put it in the P element
-    this._blinkEl.innerHTML = this.innerHTML
+    // Copy the initial text from the host into the span.
+    // Use textContent, not innerHTML.
+    //
+    // Example idea:
+    //   this._blinkEl.textContent = ???
 
-    // Use this to manage the opacity
-    this._opacity = 1
+
+    // Set default values for internal state:
+    //
+    //   this._time = 1000;     // default blink interval in ms
+    //   this._min  = 0.0;      // default minimum opacity
+    //   this._max  = 1.0;      // default maximum opacity
+    //   this._opacityFlag = 1; // tracks "on/off" state (1 = max, 0 = min)
+    //
+    // Initialize these properties here so you always have a fallback
+    // when attributes are missing.
+
+
+    // Add initial styles to the blink element.
+    // You will probably want:
+    //
+    //   - this._blinkEl.style.display = 'inline-block';
+    //   - this._blinkEl.style.opacity = '1';
+    //   - this._blinkEl.style.transition = 'opacity 0.5s ease-in-out';
+    //
+    // (Choose your own transition duration; you can also base it on _time later.)
   }
 
-
-  // Tell this component it should look for changes to time
+  // Tell the component which attributes to watch for changes.
   static get observedAttributes() {
-    // Add observed attributs here
-    return ['time'];
-  }  
-
-
-  // Handle changes to time
-  attributeChangedCallback(name, oldValue, newValue) {
-    // When an observed attribute is changed this method is called with
-    // the name of the attibute, it's oldValue, and it's newValue
-    // Check the name, assign the newValue and do anything else needed. 
-    // If the time changes you'll need to remove the timer and start it again
-    if (name === 'time') {
-      this._time = parseInt(newValue) // set the time
-      this._clearTimer()  // clear any old Timers
-      this._addTimer() // add a new timer
-    }
+    // -----------------------------------------
+    // CHALLENGE 1 — OBSERVED ATTRIBUTES
+    // -----------------------------------------
+    //
+    // Add all the attribute names you want to respond to here.
+    //
+    // At minimum:
+    //   - "time"
+    //   - "min"
+    //   - "max"
+    //
+    // Example shape:
+    //   return ['time', 'min', 'max'];
+    //
+    // Fill this in.
+    return [];
   }
 
+  // Called when an observed attribute changes:
+  //   name:      the attribute name (e.g. "time")
+  //   oldValue:  previous value (string or null)
+  //   newValue:  new value (string or null)
+  attributeChangedCallback(name, oldValue, newValue) {
+    // -----------------------------------------
+    // CHALLENGE 2 — HANDLE ATTRIBUTE CHANGES
+    // -----------------------------------------
+    //
+    // For each observed attribute:
+    //
+    //   - If name === 'time':
+    //       - parse newValue as an integer and assign to this._time
+    //       - restart the timer (clear old interval, start a new one)
+    //
+    //   - If name === 'min':
+    //       - parse newValue as a float and assign to this._min
+    //
+    //   - If name === 'max':
+    //       - parse newValue as a float and assign to this._max
+    //
+    // HINTS:
+    //   - use Number(), parseInt(), or parseFloat() as appropriate
+    //   - guard against NaN (fallback to defaults if parsing fails)
+    //   - you will want to call this._clearTimer() and this._addTimer()
+    //     when time changes.
+  }
 
   connectedCallback() {
-    this._addTimer()
+    // -----------------------------------------
+    // CHALLENGE 3 — READ INITIAL ATTRIBUTES
+    // -----------------------------------------
+    //
+    // When the element is inserted into the DOM:
+    //
+    //   - Read the current values of the attributes (time, min, max)
+    //     using this.getAttribute('time') etc.
+    //   - If the attributes are present, update this._time, this._min, this._max.
+    //   - Then start the blink timer by calling a helper method, e.g.:
+    //       this._addTimer();
+    //
+    // Make sure you don't create multiple timers if connectedCallback()
+    // runs more than once.
   }
-
 
   disconnectedCallback() {
-    this._clearTimer()
+    // -----------------------------------------
+    // CHALLENGE 4 — CLEAN UP YOUR TIMER
+    // -----------------------------------------
+    //
+    // When the element is removed from the DOM, you must clear
+    // the interval so it doesn't continue running.
+    //
+    // Implement a helper method _clearTimer() and call it here.
   }
-
 
   _addTimer() {
-    this._blinkEl.style.transition = this._time + 'ms'
-    this._timer = setInterval(() => {
-      // tracks the state of the element fading in 1 and fading out 0
-      this._opacity = this._opacity === 1 ? 0 : 1
-      // Use the min and max properties here
-      if (this._opacity === 1) {
-        this._blinkEl.style.opacity = 1
-      } else {
-        this._blinkEl.style.opacity = 0
-      }
-    }, this._time);
+    // -----------------------------------------
+    // CHALLENGE 5 — IMPLEMENT THE TIMER
+    // -----------------------------------------
+    //
+    // Implement the logic to:
+    //
+    //   - clear any existing interval (defensive)
+    //   - set this._blinkEl.style.transition for smooth fading
+    //     (you can base the duration on this._time if you want)
+    //   - create a new interval with:
+    //
+    //       this._timer = setInterval(() => {
+    //         // toggle between min and max opacity
+    //       }, this._time);
+    //
+    // Use your internal state:
+    //   - if this._opacityFlag is 1, set opacity to this._min
+    //   - if this._opacityFlag is 0, set opacity to this._max
+    //   - then flip the flag:
+    //       this._opacityFlag = this._opacityFlag === 1 ? 0 : 1;
   }
 
-
   _clearTimer() {
-    console.log('clear', this._time)
-    clearInterval(this._timer)
+    // -----------------------------------------
+    // CHALLENGE 6 — CLEAR THE INTERVAL
+    // -----------------------------------------
+    //
+    // If this._timer is set, call clearInterval(this._timer).
+    // Then reset this._timer to null (or undefined).
+    //
+    // Always check first so you don't call clearInterval on
+    // an undefined value.
   }
 }
 
 customElements.define('blink-text', BlinkText);
 
-
 /*
+ATTRIBUTES & BEHAVIOR NOTES
+---------------------------
 
-The new tags you define have attributes like the regular tags. 
-Attributes set options used to configure the functionality of 
-the element. 
+The idea here is that your custom element behaves like a "real" HTML tag:
 
-Here the time of the blink is set with the time attribute. 
-Take a look at the tags in the html:
+  <blink-text time="2000" min="0.5" max="1.0">Hello World</blink-text>
 
-<blink-text time="2000">Hello World</blink-text>
-<blink-text time="1000">Foo Par</blink-text>
+- "time" controls the blink interval in ms (e.g. 2000ms = 2 seconds).
+- "min" and "max" control the opacity range (from 0.0 to 1.0).
 
-The change the tiems and test. The times are set in millisecond, 
-so 1000 = 1 sec. 
+CHALLENGE SUMMARY:
 
-- Challenge - 1 - 
+1. Add 'time', 'min', and 'max' to observedAttributes().
+2. Parse and store attribute values in attributeChangedCallback().
+3. Read initial attribute values in connectedCallback().
+4. Implement _addTimer() to:
+   - set up the transition
+   - start setInterval() that toggles opacity between min and max.
+5. Implement _clearTimer() to safely clear the interval.
+6. Make sure changing the "time" attribute restarts the timer.
 
- Opacity changes from 1 to 0 currently. Add two new attributes 
- one for the min opacity and the other for max. Follow these steps: 
+OPTIONAL EXTRAS:
 
- - Set the attributes on the tags <blink-text time="1000" min="0.5" max="1.0">
- - use a couple properties to keep track of opacity.
-  - this._opacity - tracks whether the element is fading in or out
-  - this._min - the minimum value of opacity 0.0 to 1.0
-  - this._max - ths maximum value of opacity 0.0 to 1.0
-  - Assign each of these a default value in the constructor
- - Use the attributeChangedCallback() to set the attribute value on your properties
- - Use the values you stored in properties in the _addTimer() method to set the opacity.
-  - Each time the interval callbacks is called:
-    - toggle the this._opacity from 0 to 1
-    - Then set the opacity of the element to: 
-      - min if opacity is 0
-      - max if opacity is 1
-
+- Add a "paused" attribute; when present, stop blinking.
+- Add a "once" attribute; fade in and out one time, then stop.
+- Add a "mode" attribute that switches between "fade" and "hard" blink.
 */

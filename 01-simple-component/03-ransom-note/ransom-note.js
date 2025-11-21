@@ -1,92 +1,132 @@
+// Tutorial #3 — Ransom Note Web Component
+// ---------------------------------------
+//
+// This component will take the text inside <ransom-note>
+// and render it so each character looks like a mismatched,
+// randomly styled ransom-note letter.
+//
+// Example:
+//
+//   <ransom-note>This looks suspicious</ransom-note>
+//
+// Should render each character with different:
+// - font sizes
+// - rotations
+// - colors
+// - font-families
+// - font-weights
+//
+// Your job: follow the instructions inside the comments below
+// to build this component.
 
-// Make a new Component
 class RansomNote extends HTMLElement {
   constructor() {
-    super(); 
+    super();
+
+    // Create a shadow root for isolated rendering.
     this._shadowRoot = this.attachShadow({ mode: 'open' });
-    
-    // Get the text of the host element this.innerHTML
+  }
 
-    // Split the string into an array of words text.split(' ')
+  connectedCallback() {
+    // -----------------------------------------
+    // CHALLENGE 1 — READ THE INPUT TEXT
+    // -----------------------------------------
+    //
+    // Get the original text content inside the <ransom-note> tag.
+    // Use a property that returns plain text, not HTML.
+    //
+    // Example idea:
+    //   const text = ???
+    //
+    // Trim whitespace so it doesn't create blank characters.
 
-    // Loop over each word in the array
 
-      // Make a span 
+    // -----------------------------------------
+    // CHALLENGE 2 — SPLIT INTO CHARACTERS
+    // -----------------------------------------
+    //
+    // You need to style EACH CHARACTER individually.
+    // Create an array of individual characters.
+    //
+    //   const chars = text.split(??)
+    //
+    // Think: which value to provide to split()?
 
-      // Set the innerHTML of the span to the current word 
 
-      // Set a random style for example: 
-      // span.style.fontSize = `${Math.random() * 20 + 12}px`
-      // Should set a fontSize between 12px and 32px
+    // -----------------------------------------
+    // CHALLENGE 3 — LOOP & CREATE SPANS
+    // -----------------------------------------
+    //
+    // For EACH character:
+    //
+    //   1. Create a <span> element.
+    //        const el = document.createElement('span')
+    //
+    //   2. Place the character inside the span.
+    //        el.textContent = singleCharacter
+    //
+    //   3. Apply SEVERAL random styles.
+    //
+    //       Examples (you decide the ranges!):
+    //
+    //       - font-size:
+    //         el.style.fontSize = `${Math.random() * ? + ?}px`
+    //
+    //       - rotation:
+    //         el.style.transform = `rotate(${Math.random() * ? - ?}deg)`
+    //
+    //       - color:
+    //         el.style.color = `hsl(${Math.random() * 360}, 100%, 50%)`
+    //
+    //       - font-family:
+    //         const fonts = ['Helvetica', 'Times', 'Courier', 'Georgia'];
+    //         el.style.fontFamily = fonts[ randomIndex ]
+    //
+    //       - font-weight:
+    //         choose random values you like:
+    //         100, 300, 500, 700, 900
+    //
+    //   4. Append the span to the shadow root.
+    //        this._shadowRoot.appendChild(el)
+    //
+    // IMPORTANT:
+    //   Preserve spaces! If the character is a space,
+    //   you may need to add an actual " " or &nbsp; to make sure
+    //   the layout doesn’t collapse.
 
-      // Repeat the process above for as many styles as you can. For example: 
-      // span.style.transform = `rotate(${Math.random() * 40 - 20}deg)`
-      // WOuld generate a a rotation of -20deg to +20deg
 
-      // Append the word to the shadowroot
+    // -----------------------------------------
+    // CHALLENGE 4 — MAKE IT LOOK MORE CHAOTIC
+    // -----------------------------------------
+    //
+    // Add randomness to:
+    //   - letter spacing
+    //   - vertical alignment
+    //   - rotation direction bias
+    //   - color palette variety
+    //
+    // The goal is *messy but readable*.
+
+
+    // -----------------------------------------
+    // OPTIONAL CHALLENGE 5 — USER-CONTROLLED CHAOS
+    // -----------------------------------------
+    //
+    // Add an attribute so users can control the intensity.
+    //
+    // Example:
+    //   <ransom-note chaos="high">...</ransom-note>
+    //
+    // Implement chaos levels:
+    //   - "low": small rotations, subtle color changes
+    //   - "medium": normal random range
+    //   - "high": wild rotations, large font differences
+    //
+    // HINT:
+    //   const level = this.getAttribute('chaos') || 'medium'
+    //
+    // Then use "level" to scale your random ranges.
   }
 }
 
 customElements.define('ransom-note', RansomNote);
-
-/* 
-
-- Challenge - 1 - 
-
-We need a tag that generates text text that looks like a ransom note. 
-Each character needs a different style. The more random and different 
-you can make each of the characters the better!
-
-Take a look at the Sample HTML code: 
-
-<p>
-  <span style="font-size: 22px;">A</span>
-  <span style="font-size: 16px;">B</span>
-  <span style="font-size: 24px;">C</span>
-  <span style="font-size: 33px;">D</span>
-  <span style="font-size: 18px;">E</span>
-</p>
-
-Your goal is to generate something similar inside the shadowroot. 
-Follow these steps. 
-
-To solve this you'll need to loop over each character of a string. 
-There are several ways to accomplish this. An easy method would be 
-to create an array of characters using string.split('') 
-
-- Get the text content of the original element. 
-- For each character in the string make a span.
-- Put one character from the source string into each span.
-- Set the fontSize of each span to a random font size. 
-
-Generate random numbers with: 
-
-Math.random() * range
-
-for example: 
-
-// generates a random number from 0.0 to 6.0 e.g. 3.458294
-Math.random() * 6 
-
-If you need an integer use Math.floor() or Math.round()
-
-// generates a random number from 0 to 5 e.g. 4
-Math.floor(Math.random() * 6) 
-
-If you have values that are not numbers make an array get a random it from the array
-
-const array = ['Helvetica', 'Times', 'Courier']
-array[Math.floor(Math.random() * array.length)]
-
-- Challenge - 2 - 
-
-Try setting a wider range of properties. 
-
-- color
-- font-size
-- transform: rotate(randomValue)
-- font-family
-- font-weight
-
-*/
-
