@@ -1,16 +1,28 @@
 # Simple Web Component Examples
- 
-These are examples of Web Components. These examples cover these basic concepts: 
 
-- Defining Web Components 
-- Reflecting properties as attributes 
-- Creating a shadow root
+This repo contains examples that introduce web components. 
 
-## Getting started
+Your goal is to look at the examples and solve the challenge problems included there in the comments. 
 
-Start with the examples in the simple-component directory. These are numbered, do them in order, each example builds to the next. Each example has an html and JS file with some challenges written in comments. 
+You should complete at least the first two examples in section. 
 
-The simple-component-solutions directory contains solutions for each of the challenges. You can take a look in here for clues if you get 
-stuck. 
+- 01-simple-component
+- 02-simple-component-templates
+- 03-simple-component-slots
+
+Each of the examples in these folders focus different web technologies that make up web components. 
+
+- Custom Elements - Using `customElements.define()` you create define your own, new HTML elements, and back them up with in-built functionality. 
+- Shadow Root - Using `this.attachShadow()` you can add a shadow DOM node to a custom element. 
+- HTML Template - Allows you to create template elements, `<template>`, that can be defined and copied. This is vanilla HTML, and can be used without creating a custom element. 
+- HTML Slot - The `<slot>` element works with a template. Slots define placeholders for external content to be added to a template. 
+
+Web Components have a wide range of uses. The secret is that web components can be mixed easily with other web technologies because they are native to the web. 
+
+:host :host()
+
+::slotted()
+
+::part()
 
 
