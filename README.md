@@ -19,10 +19,12 @@ Each of the examples in these folders focus different web technologies that make
 
 Web Components have a wide range of uses. The secret is that web components can be mixed easily with other web technologies because they are native to the web. 
 
-:host :host()
+Take note! The examples show two different "modes" where web components can hold their sub elements hidden in a shadow DOM, or expose their sub elements to CSS from outside. 
 
-::slotted()
+Shadow elements can be affected using CSS selectors: 
 
-::part()
+- `:host`, `:host()`
+- `::slotted()`
+- `::part()`
 
 
