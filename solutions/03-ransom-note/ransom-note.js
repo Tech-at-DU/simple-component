@@ -104,7 +104,10 @@ class RansomNote extends HTMLElement {
       span.style.width = '0.65em'
       span.style.fontSize = `${Math.random() * 20 + 30}px` 
       span.style.fontFamily = ['Helvetica', 'Times', 'Courier', 'Georgia'][Math.floor(Math.random() * 4)]
-      span.style.rotate = `${Math.random() * 16 - 8}deg`
+      span.style.rotate = `${Math.random() * 24 - 12}deg`
+      span.style.padding = `${Math.random() * 6}px`
+      span.style.textTransform = `${Math.round(Math.random()) === 0 ? 'uppercase': 'lowercase'}`
+      span.style.border = `${Math.random() * 6 + 1}px ${['solid', 'dashed', 'dotted', 'double', 'groove', 'ridge'][Math.floor(Math.random() * 6)]}`
       this._shadowRoot.appendChild(span)
     })
 
