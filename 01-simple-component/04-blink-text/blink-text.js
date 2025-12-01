@@ -99,7 +99,7 @@ class BlinkText extends HTMLElement {
     //
     // When the element is removed, you MUST clear the interval
     // so it doesn’t keep running in the background.
-    //
+    // 
     // If you stored the interval id in this._timer,
     // you can stop it with:
     //
